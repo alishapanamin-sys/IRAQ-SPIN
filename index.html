@@ -1,531 +1,483 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>فرصة اليوم داخل العراق</title>
-  <meta name="description" content="لف العجلة وحدد نوع الجائزة المحتملة ثم أكمل الخطوات." />
-  <style>
-    :root{
-      --bg1:#070913;
-      --bg2:#0A1240;
-      --neonP:#7C3AED;
-      --neonC:#22D3EE;
-      --neonB:#2563EB;
-      --gold:#FBBF24;
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.72);
-      --card:rgba(255,255,255,.06);
-      --stroke:rgba(255,255,255,.12);
-      --btn1:#6D28D9;
-      --btn2:#2563EB;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:
-        radial-gradient(900px 520px at 15% 18%, rgba(124,58,237,.22) 0%, transparent 60%),
-        radial-gradient(900px 520px at 85% 30%, rgba(34,211,238,.18) 0%, transparent 55%),
-        radial-gradient(900px 520px at 50% 92%, rgba(37,99,235,.16) 0%, transparent 55%),
-        linear-gradient(160deg,var(--bg1),var(--bg2));
-      color:var(--text);
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:18px;
-      overflow-x:hidden;
-    }
-    body::before{
-      content:"";
-      position:fixed;
-      inset:-60px;
-      background:
-        radial-gradient(circle at 10% 30%, rgba(255,255,255,.08) 0 10px, transparent 11px),
-        radial-gradient(circle at 72% 18%, rgba(255,255,255,.07) 0 12px, transparent 13px),
-        radial-gradient(circle at 50% 62%, rgba(255,255,255,.06) 0 14px, transparent 15px),
-        radial-gradient(circle at 25% 85%, rgba(255,255,255,.05) 0 16px, transparent 17px);
-      pointer-events:none;
-      opacity:.65;
-      filter: blur(1px);
-    }
-
-    .wrap{
-      width:min(1020px, 100%);
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap:16px;
-    }
-    @media (max-width: 920px){ .wrap{grid-template-columns:1fr} }
-
-    .card{
-      background:var(--card);
-      border:1px solid var(--stroke);
-      border-radius:22px;
-      box-shadow: 0 18px 60px rgba(0,0,0,.55);
-      overflow:hidden;
-      position:relative;
-    }
-
-    .head{ padding:18px 18px 12px; }
-    .flag{
-      display:inline-flex; align-items:center; gap:10px;
-      padding:10px 12px; border-radius:16px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      box-shadow: 0 10px 35px rgba(0,0,0,.25);
-    }
-    .flagMark{
-      width:38px;height:24px;border-radius:6px;
-      background: linear-gradient(#d10000 0 33%, #fff 33% 66%, #111 66% 100%);
-      position:relative; overflow:hidden;
-    }
-    .flagMark::after{
-      content:"الله أكبر";
-      position:absolute; inset:0;
-      display:grid; place-items:center;
-      font-size:10px; color:#0a9a3b; font-weight:900;
-      opacity:.9;
-      transform: translateY(1px);
-    }
-    .title{
-      margin:14px 0 4px;
-      font-size:28px;
-      font-weight:950;
-      letter-spacing:-.3px;
-      color:#ffd36b;
-      text-shadow: 0 0 18px rgba(251,191,36,.22);
-    }
-    .subtitle{
-      margin:0;
-      color:var(--muted);
-      line-height:1.6;
-      font-size:14px;
-    }
-
-    .wheelArea{ padding: 0 18px 18px; display:grid; gap:12px; }
-
-    .wheelBox{
-      border-radius:22px;
-      border:1px solid rgba(124,58,237,.24);
-      background: linear-gradient(180deg, rgba(124,58,237,.10), rgba(34,211,238,.06));
-      padding:16px;
-      position:relative;
-      overflow:hidden;
-    }
-    .wheelBox::before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(700px 240px at 30% 10%, rgba(124,58,237,.28), transparent 60%),
-        radial-gradient(700px 240px at 70% 15%, rgba(34,211,238,.22), transparent 60%);
-      pointer-events:none;
-      opacity:.75;
-    }
-
-    .wheelWrap{
-      width:min(440px, 100%);
-      margin: 6px auto 14px;
-      position:relative;
-      aspect-ratio: 1 / 1;
-      z-index:1;
-    }
-    canvas{
-      width:100%;
-      height:100%;
-      display:block;
-      border-radius:999px;
-      background:#fff;
-      box-shadow:
-        0 18px 55px rgba(0,0,0,.55),
-        0 0 32px rgba(124,58,237,.25),
-        0 0 28px rgba(34,211,238,.20);
-    }
-
-    .pointer{
-      position:absolute; top:-10px; left:50%;
-      transform:translateX(-50%);
-      width:0;height:0;
-      border-left:18px solid transparent;
-      border-right:18px solid transparent;
-      border-bottom:34px solid #ffb400;
-      filter: drop-shadow(0 10px 14px rgba(0,0,0,.5))
-              drop-shadow(0 0 10px rgba(255,180,0,.35));
-      z-index:2;
-    }
-
-    .cta{ display:flex; gap:10px; flex-wrap:wrap; z-index:1; position:relative; }
-    .btn{
-      flex:1;
-      border:none;
-      border-radius:18px;
-      padding:14px 14px;
-      font-weight:950;
-      font-size:16px;
-      cursor:pointer;
-      color:rgba(255,255,255,.95);
-      background: linear-gradient(135deg, var(--btn1), var(--btn2));
-      box-shadow:
-        0 10px 30px rgba(37,99,235,.25),
-        0 0 22px rgba(124,58,237,.22),
-        inset 0 0 0 1px rgba(255,255,255,.12);
-      transition: transform .08s ease, opacity .12s ease;
-    }
-    .btn:active{ transform: scale(.99); }
-    .btn:disabled{ opacity:.55; cursor:not-allowed; }
-    .btnGhost{
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow:none;
-      font-weight:900;
-    }
-
-    .result{
-      margin-top:12px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.20);
-      padding:12px 12px;
-      z-index:1;
-      position:relative;
-    }
-    .result small{ color:var(--muted); display:block; margin-bottom:6px }
-    .result b{
-      display:block;
-      font-size:17px;
-      color:#ffe08a;
-      text-shadow: 0 0 18px rgba(251,191,36,.20);
-      min-height: 22px;
-    }
-
-    .gifts{
-      margin-top:12px;
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap:10px;
-      z-index:1;
-      position:relative;
-    }
-    @media (max-width: 520px){ .gifts{grid-template-columns:1fr} }
-    .gift{
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
-      padding:12px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .gift .ico{
-      width:36px;height:36px;border-radius:14px;
-      display:grid; place-items:center;
-      background: rgba(34,211,238,.14);
-      border:1px solid rgba(34,211,238,.22);
-      font-size:18px;
-      flex:0 0 auto;
-    }
-    .gift b{display:block; font-size:13px; margin-bottom:2px}
-    .gift span{display:block; font-size:12px; color:rgba(255,255,255,.72); line-height:1.5}
-
-    .footRow{
-      display:flex; justify-content:space-between; gap:10px;
-      margin-top:12px;
-      color:rgba(255,255,255,.65);
-      font-size:12px;
-      z-index:1;
-      position:relative;
-    }
-
-    .side{ padding:18px; }
-    .side h2{ margin:0 0 10px; font-size:16px; letter-spacing:-.2px; }
-    .step{
-      display:flex; gap:10px;
-      padding:12px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
-      margin-bottom:10px;
-    }
-    .n{
-      width:30px;height:30px;border-radius:12px;
-      display:grid; place-items:center;
-      background: rgba(124,58,237,.16);
-      border:1px solid rgba(124,58,237,.26);
-      font-weight:950;
-    }
-    .step b{ display:block; font-size:13px; margin-bottom:3px }
-    .step span{ display:block; font-size:12px; color:rgba(255,255,255,.72); line-height:1.6 }
-
-    .note{
-      margin-top:12px;
-      padding-top:12px;
-      border-top:1px dashed rgba(255,255,255,.15);
-      font-size:11.5px;
-      color:rgba(255,255,255,.60);
-      line-height:1.7;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>لف واربح 🎁</title>
+<style>
+  :root{
+    --bg:#0f172a;
+    --card:#111c3a;
+    --text:#ffffff;
+    --muted:#cbd5e1;
+    --accent:#22c55e;
+    --accent2:#6366f1;
+    --danger:#ef4444;
+    --gold:#facc15;
+  }
+  body{
+    margin:0;
+    font-family: Tahoma, Arial, sans-serif;
+    background: radial-gradient(900px 600px at 70% 0%, #1b2a6b 0%, transparent 60%),
+                radial-gradient(900px 600px at 10% 20%, #4c1d95 0%, transparent 55%),
+                var(--bg);
+    color:var(--text);
+    text-align:center;
+    padding:18px;
+  }
+  h1{margin:14px 0 6px; font-size:28px}
+  #countdown{font-size:20px; margin-top:8px; color:var(--gold)}
+  .wrap{max-width:980px; margin:0 auto}
+  .wheelWrap{
+    margin:16px auto 10px;
+    width:min(520px, 95vw);
+    padding:14px;
+    background: rgba(17,28,58,.7);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:18px;
+    box-shadow:0 18px 50px rgba(0,0,0,.35);
+    position:relative;
+  }
+  canvas{
+    width:min(480px, 92vw);
+    height:min(480px, 92vw);
+    border-radius:50%;
+    background: rgba(255,255,255,.04);
+    display:block;
+    margin:0 auto;
+  }
+  .pointer{
+    position:absolute;
+    top:4px;
+    left:50%;
+    transform:translateX(-50%);
+    width:0;height:0;
+    border-left:18px solid transparent;
+    border-right:18px solid transparent;
+    border-bottom:34px solid var(--danger);
+    filter: drop-shadow(0 8px 12px rgba(0,0,0,.4));
+  }
+  .pointer::after{
+    content:"";
+    position:absolute;
+    left:-8px; top:10px;
+    width:16px; height:16px;
+    background:#fff;
+    border-radius:50%;
+    box-shadow:0 8px 20px rgba(0,0,0,.35);
+  }
+  .btns{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:12px 0 6px}
+  button{
+    padding:14px 22px;
+    font-size:18px;
+    border:0;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:800;
+  }
+  .spinBtn{background: linear-gradient(135deg, #22c55e, #16a34a); color:#05210f; min-width:180px}
+  .ghostBtn{background: rgba(255,255,255,.08); color:var(--text); border:1px solid rgba(255,255,255,.14)}
+  .note{font-size:13px; color:var(--muted); margin-top:8px; line-height:1.7}
+  .list{
+    max-width:520px;
+    margin:14px auto 0;
+    background: rgba(17,28,58,.55);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:18px;
+    padding:12px;
+    text-align:right;
+  }
+  .item{
+    display:flex; gap:12px; align-items:center;
+    padding:10px 10px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.04);
+    margin:8px 0;
+  }
+  .item img{width:46px; height:46px; object-fit:cover; border-radius:12px; background:rgba(255,255,255,.08)}
+  .item b{display:block}
+  .item small{color:var(--muted)}
+  /* Modal */
+  .modal{
+    position:fixed; inset:0;
+    background:rgba(0,0,0,.65);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+    z-index:50;
+  }
+  .modal.show{display:flex}
+  .modal .box{
+    width:min(520px, 100%);
+    background: rgba(17,28,58,.96);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:18px;
+    padding:18px;
+    box-shadow: 0 24px 70px rgba(0,0,0,.55);
+  }
+  .winImg{
+    width:120px;height:120px;
+    border-radius:22px;
+    object-fit:cover;
+    background: rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.12);
+    margin:10px auto 6px;
+    display:none;
+  }
+  .modal h2{margin:8px 0 8px}
+  .modal p{margin:0 0 12px; color:var(--muted); line-height:1.7}
+  .claimRow{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:10px}
+  .claimBtn{
+    display:inline-block;
+    padding:13px 18px;
+    border-radius:12px;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color:#05210f;
+    text-decoration:none;
+    font-weight:900;
+    min-width: 190px;
+  }
+</style>
 </head>
-
 <body>
-  <main class="wrap">
-    <!-- Main -->
-    <section class="card">
-      <div class="head">
-        <div class="flag">
-          <div class="flagMark" aria-hidden="true"></div>
-          <div>
-            <div style="font-weight:950;">العراق فقط</div>
-            <div style="color:var(--muted); font-size:12px;">لفترة محدودة</div>
-          </div>
-        </div>
+<div class="wrap">
+  <h1>لف العجلة واربح 🎁</h1>
+  <div id="countdown"></div>
 
-        <h1 class="title">فرصة اليوم داخل العراق!</h1>
-        <p class="subtitle">
-          لف العجلة لتحديد <b>نوع الهدية المحتملة</b>، ثم انتقل لإكمال الخطوات المطلوبة.
-        </p>
-      </div>
+  <div class="wheelWrap">
+    <div class="pointer" aria-hidden="true"></div>
+    <canvas id="wheel" width="900" height="900"></canvas>
 
-      <div class="wheelArea">
-        <div class="wheelBox">
-          <div class="wheelWrap">
-            <div class="pointer"></div>
-            <canvas id="wheel" width="440" height="440"></canvas>
-          </div>
+    <div class="btns">
+      <button class="spinBtn" id="spinBtn">لف الآن</button>
+      <button class="ghostBtn" id="resetBtn">إعادة ضبط</button>
+    </div>
 
-          <div class="cta">
-            <button class="btn" id="spinBtn">لف العجلة الآن!</button>
-            <button class="btn btnGhost" id="retryBtn" disabled>محاولة أخرى</button>
-          </div>
+    <div class="note">
+      ضع صور الهدايا في فولدر <b>assets</b> بنفس الأسماء الموجودة في الكود.
+    </div>
+  </div>
 
-          <div class="result">
-            <small>النتيجة</small>
-            <b id="resultText">—</b>
-          </div>
+  <div class="list" id="prizeList"></div>
+</div>
 
-          <!-- جوائز معروضة تحت العجلة -->
-          <div class="gifts">
-            <div class="gift"><div class="ico">📱</div><div><b>iPhone</b><span>هدية محتملة ضمن سحب اليوم</span></div></div>
-            <div class="gift"><div class="ico">📲</div><div><b>Samsung</b><span>فرصة ضمن المشاركات المؤهلة</span></div></div>
-            <div class="gift"><div class="ico">🎧</div><div><b>AirPods</b><span>قد تتوفر حسب التوافق</span></div></div>
-            <div class="gift"><div class="ico">🎁</div><div><b>هدايا أخرى</b><span>عروض متنوعة حسب الشروط</span></div></div>
-          </div>
+<!-- Modal -->
+<div class="modal" id="modal">
+  <div class="box">
+    <img id="winImg" class="winImg" alt="الجائزة" />
+    <h2 id="winTitle">مبروك!</h2>
+    <p id="winText"></p>
 
-          <div class="footRow">
-            <div>✅ العراق فقط</div>
-            <div>⏳ لفترة محدودة</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Side -->
-    <aside class="card side">
-      <h2>كيف تعمل؟</h2>
-
-      <div class="step">
-        <div class="n">1</div>
-        <div>
-          <b>اضغط لف العجلة</b>
-          <span>ستظهر لك هدية/فئة هدية “محتملة” ضمن سحب اليوم.</span>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="n">2</div>
-        <div>
-          <b>أكمل الخطوات</b>
-          <span>سيتم تحويلك للصفحة التالية لإتمام المتطلبات (قد تختلف حسب العرض).</span>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="n">3</div>
-        <div>
-          <b>تحقق من الأهلية</b>
-          <span>التوفر يعتمد على الدولة/المشغل/الجهاز وقيود العرض.</span>
-        </div>
-      </div>
-
-      <div class="note">
-        ملاحظة: الصفحة لا تضمن الفوز بأي هدية. المشاركة تخضع للشروط والمتطلبات في الصفحة التالية.
-      </div>
-    </aside>
-  </main>
+    <div class="claimRow">
+      <a id="claimBtn" class="claimBtn" target="_blank" rel="noopener">استلام الهدية</a>
+      <button class="ghostBtn" id="closeBtn">إغلاق</button>
+    </div>
+  </div>
+</div>
 
 <script>
-  // ✅ ضع رابط عرض CPA هنا
-  const CPA_LINK = "PUT_YOUR_CPA_LINK_HERE";
+  // ✅ لينك الـ CPA (مركّب)
+  const CPA_URL = "https://adsmain.bountyads.store/?utm_medium=24c9e8ead1a61abc4ca11515604da84dbebe69ba&utm_campaign=spent";
+
+  // ✅ الجوائز: 4 صور + "حظ أوفر" مرتين
+  const prizes = [
+    { label: "Samsung Galaxy S24 Ultra", img: "assets/galaxys24ultra-png.png" },
+    { label: "Apple Watch Series 9",      img: "assets/apple-watch-series-9-png.png" },
+    { label: "iPhone 15 Pro Max",         img: "assets/apple-iphone-15-pro-max-natural-titanium-png.png" },
+    { label: "AirPods Pro (2nd Gen)",     img: "assets/airpods-pro-2nd-generation-png.png" },
+    { label: "حظ أوفر",                   img: null },
+    { label: "حظ أوفر",                   img: null },
+  ];
+
+  const sliceColors = [
+    "rgba(99,102,241,.82)",
+    "rgba(139,92,246,.78)",
+    "rgba(34,197,94,.70)",
+    "rgba(245,158,11,.72)",
+    "rgba(236,72,153,.68)",
+    "rgba(59,130,246,.70)"
+  ];
 
   const canvas = document.getElementById("wheel");
   const ctx = canvas.getContext("2d");
 
   const spinBtn = document.getElementById("spinBtn");
-  const retryBtn = document.getElementById("retryBtn");
-  const resultText = document.getElementById("resultText");
+  const resetBtn = document.getElementById("resetBtn");
 
-  // ✅ جوائز على العجلة (بدون مبالغة)
-  const segments = [
-    { t:"📱 iPhone", },
-    { t:"🎧 AirPods", },
-    { t:"📲 Samsung", },
-    { t:"🎁 هدية مفاجأة", },
-    { t:"🎮 بطاقة شحن", },
-    { t:"🛍️ قسيمة شراء", }
-  ];
+  const modal = document.getElementById("modal");
+  const closeBtn = document.getElementById("closeBtn");
+  const winImg = document.getElementById("winImg");
+  const winTitle = document.getElementById("winTitle");
+  const winText = document.getElementById("winText");
+  const claimBtn = document.getElementById("claimBtn");
 
-  const colors = ["#2563EB","#A855F7","#22C55E","#F59E0B","#14B8A6","#EF4444"];
+  const prizeList = document.getElementById("prizeList");
 
-  let angle = 0;
-  let spinning = false;
+  // تحميل الصور
+  const loadedImages = new Map();
+  function loadImage(src){
+    return new Promise((resolve) => {
+      if(!src) return resolve(null);
+      if(loadedImages.has(src)) return resolve(loadedImages.get(src));
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => { loadedImages.set(src, img); resolve(img); };
+      img.onerror = () => resolve(null);
+      img.src = src;
+    });
+  }
 
-  function drawNeonLED(center, radius){
-    const dots = 56;
-    for(let i=0;i<dots;i++){
-      const a = (i/dots) * 2*Math.PI;
-      const x = center + Math.cos(a) * radius;
-      const y = center + Math.sin(a) * radius;
+  // رسم العجلة
+  let currentRotation = 0; // radians
 
-      const glow = (i%3===0) ? "rgba(34,211,238,.88)" :
-                   (i%3===1) ? "rgba(124,58,237,.88)" :
-                               "rgba(37,99,235,.88)";
+  function roundRect(ctx, x, y, w, h, r){
+    const rr = Math.min(r, w/2, h/2);
+    ctx.beginPath();
+    ctx.moveTo(x+rr, y);
+    ctx.arcTo(x+w, y, x+w, y+h, rr);
+    ctx.arcTo(x+w, y+h, x, y+h, rr);
+    ctx.arcTo(x, y+h, x, y, rr);
+    ctx.arcTo(x, y, x+w, y, rr);
+    ctx.closePath();
+  }
 
-      ctx.beginPath();
-      ctx.arc(x,y,4.0,0,2*Math.PI);
-      ctx.fillStyle = glow;
-      ctx.shadowColor = glow;
-      ctx.shadowBlur = 14;
-      ctx.fill();
-    }
-    ctx.shadowBlur = 0;
+  function truncate(s, n){
+    return s.length > n ? s.slice(0, n-1) + "…" : s;
   }
 
   function drawWheel(){
-    const size = canvas.width;
-    const center = size/2;
-    const radius = center - 28;
-    const arc = (2*Math.PI)/segments.length;
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0,0,w,h);
 
-    ctx.clearRect(0,0,size,size);
+    const cx = w/2, cy = h/2;
+    const R = Math.min(w,h)*0.46;
+    const slices = prizes.length;
+    const sliceAngle = (Math.PI*2)/slices;
 
-    // outer glow ring
-    ctx.beginPath();
-    ctx.arc(center,center,radius+18,0,2*Math.PI);
-    ctx.fillStyle = "rgba(124,58,237,.14)";
-    ctx.fill();
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.rotate(currentRotation);
 
-    // outer dark ring
-    ctx.beginPath();
-    ctx.arc(center,center,radius+12,0,2*Math.PI);
-    ctx.fillStyle = "#0A0F24";
-    ctx.fill();
+    for(let i=0;i<slices;i++){
+      const start = i*sliceAngle;
+      const end = start + sliceAngle;
 
-    // LED ring
-    drawNeonLED(center, radius+8);
-
-    // slices
-    for(let i=0;i<segments.length;i++){
-      const start = angle + i*arc;
-      const end = start + arc;
-
+      // sector
       ctx.beginPath();
-      ctx.moveTo(center,center);
-      ctx.arc(center,center,radius,start,end);
+      ctx.moveTo(0,0);
+      ctx.arc(0,0,R,start,end);
       ctx.closePath();
-      ctx.fillStyle = colors[i % colors.length];
+
+      ctx.fillStyle = sliceColors[i % sliceColors.length];
       ctx.fill();
 
-      // label
+      ctx.strokeStyle = "rgba(255,255,255,.18)";
+      ctx.lineWidth = 6;
+      ctx.stroke();
+
+      // middle angle
+      const mid = start + sliceAngle/2;
+
+      // draw image or "حظ أوفر"
+      const img = prizes[i].img ? (loadedImages.get(prizes[i].img) || null) : null;
+      const imgR = R*0.18;
+      const imgX = Math.cos(mid) * (R*0.62);
+      const imgY = Math.sin(mid) * (R*0.62);
+
+      if(img){
+        ctx.save();
+        ctx.translate(imgX, imgY);
+        // اجعل الصورة مستقيمة للعرض
+        ctx.rotate(-currentRotation - mid + Math.PI/2);
+
+        roundRect(ctx, -imgR-10, -imgR-10, (imgR+10)*2, (imgR+10)*2, 18);
+        ctx.fillStyle = "rgba(0,0,0,.22)";
+        ctx.fill();
+
+        ctx.drawImage(img, -imgR, -imgR, imgR*2, imgR*2);
+        ctx.restore();
+      } else {
+        ctx.save();
+        ctx.translate(imgX, imgY);
+        ctx.rotate(-currentRotation - mid + Math.PI/2);
+
+        ctx.fillStyle = "rgba(0,0,0,.22)";
+        roundRect(ctx, -imgR-10, -imgR-10, (imgR+10)*2, (imgR+10)*2, 18);
+        ctx.fill();
+
+        ctx.fillStyle = "rgba(255,255,255,.92)";
+        ctx.font = "900 28px Tahoma, Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("حظ أوفر", 0, 0);
+
+        ctx.restore();
+      }
+
+      // label text
+      const textX = Math.cos(mid) * (R*0.80);
+      const textY = Math.sin(mid) * (R*0.80);
+
       ctx.save();
-      ctx.translate(center,center);
-      ctx.rotate(start + arc/2);
-      ctx.textAlign = "right";
+      ctx.translate(textX, textY);
+      ctx.rotate(-currentRotation - mid + Math.PI/2);
+
       ctx.fillStyle = "rgba(255,255,255,.95)";
-      ctx.font = "950 22px Arial";
-      ctx.shadowColor = "rgba(0,0,0,.35)";
-      ctx.shadowBlur = 6;
-      ctx.fillText(segments[i].t, radius - 18, 10);
+      ctx.font = "800 22px Tahoma, Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(truncate(prizes[i].label, 16), 0, 0);
+
       ctx.restore();
     }
-    ctx.shadowBlur = 0;
 
-    // center button
+    // center
+    ctx.save();
+    ctx.rotate(-currentRotation);
     ctx.beginPath();
-    ctx.arc(center,center,58,0,2*Math.PI);
-    ctx.fillStyle = "#0B1026";
+    ctx.arc(0,0,R*0.14,0,Math.PI*2);
+    ctx.fillStyle = "rgba(255,255,255,.92)";
     ctx.fill();
+    ctx.restore();
 
-    // neon strokes
-    ctx.strokeStyle = "rgba(34,211,238,.55)";
-    ctx.lineWidth = 4;
-    ctx.shadowColor = "rgba(34,211,238,.55)";
-    ctx.shadowBlur = 18;
-    ctx.stroke();
-
-    ctx.shadowBlur = 0;
-    ctx.beginPath();
-    ctx.arc(center,center,50,0,2*Math.PI);
-    ctx.strokeStyle = "rgba(124,58,237,.45)";
-    ctx.lineWidth = 3;
-    ctx.stroke();
-
-    ctx.fillStyle = "rgba(255,255,255,.95)";
-    ctx.font = "950 24px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText("ابدأ", center, center+9);
+    ctx.restore();
   }
 
-  drawWheel();
+  // تحديد الفائز عند المؤشر (أعلى)
+  function getWinnerIndex(finalRotation){
+    const slices = prizes.length;
+    const sliceAngle = (Math.PI*2)/slices;
+    const pointerAngle = -Math.PI/2;
+
+    let ang = (pointerAngle - finalRotation) % (Math.PI*2);
+    if(ang < 0) ang += Math.PI*2;
+
+    return Math.floor(ang / sliceAngle);
+  }
+
+  // سبين
+  let spinning = false;
+  function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
 
   function spin(){
     if(spinning) return;
     spinning = true;
     spinBtn.disabled = true;
-    retryBtn.disabled = true;
-    resultText.textContent = "جاري الدوران…";
 
-    const arc = (2*Math.PI)/segments.length;
-    const targetIndex = Math.floor(Math.random()*segments.length);
+    const extraTurns = 6 + Math.random()*4;
+    const randomOffset = Math.random() * Math.PI*2;
+    const start = currentRotation;
+    const target = start + extraTurns * Math.PI*2 + randomOffset;
 
-    const jitter = (Math.random()*0.55 + 0.20) * arc;
-    const targetAngle = (2*Math.PI) - (targetIndex * arc + jitter);
+    const duration = 5200 + Math.random()*900;
+    const t0 = performance.now();
 
-    const spins = Math.floor(Math.random()*4) + 7; // 7-10
-    const finalAngle = angle + spins*2*Math.PI + targetAngle;
-
-    const duration = 4200;
-    const start = performance.now();
-
-    function animate(now){
-      const t = Math.min((now-start)/duration, 1);
-      const ease = 1 - Math.pow(1 - t, 3);
-
-      angle = angle + (finalAngle - angle) * ease;
+    function frame(now){
+      const t = Math.min(1, (now - t0) / duration);
+      const e = easeOutCubic(t);
+      currentRotation = start + (target - start) * e;
       drawWheel();
 
       if(t < 1){
-        requestAnimationFrame(animate);
+        requestAnimationFrame(frame);
       } else {
-        const normalized = (2*Math.PI - (angle % (2*Math.PI))) % (2*Math.PI);
-        const index = Math.floor(normalized / arc) % segments.length;
-
-        resultText.textContent = "نتيجتك: " + segments[index].t;
-        retryBtn.disabled = false;
+        currentRotation = target % (Math.PI*2);
+        drawWheel();
+        const winIdx = getWinnerIndex(currentRotation);
+        showWin(winIdx);
         spinning = false;
-
-        // تحويل تلقائي
-        setTimeout(()=>{ window.location.href = CPA_LINK; }, 1600);
+        spinBtn.disabled = false;
       }
     }
-    requestAnimationFrame(animate);
+    requestAnimationFrame(frame);
+  }
+
+  function showWin(i){
+    const p = prizes[i];
+
+    winTitle.textContent = (p.label === "حظ أوفر") ? "حظ أوفر 😅" : "مبروك! 🎉";
+    winText.textContent = (p.label === "حظ أوفر")
+      ? "جرّب تاني! يمكن المرة الجاية تكسب 🎁"
+      : `فزت بـ: ${p.label} — سيتم تحويلك لاستلام الهدية.`;
+
+    // زر الاستلام
+    claimBtn.href = CPA_URL;
+
+    // إظهار/إخفاء صورة الفوز
+    if(p.img){
+      winImg.src = p.img;
+      winImg.alt = p.label;
+      winImg.style.display = "block";
+    } else {
+      winImg.style.display = "none";
+    }
+
+    modal.classList.add("show");
+
+    // ✅ تحويل تلقائي للـ CPA فقط لو مش "حظ أوفر"
+    if(p.label !== "حظ أوفر"){
+      setTimeout(() => {
+        window.location.href = CPA_URL;
+      }, 1500);
+    }
+  }
+
+  function closeModal(){
+    modal.classList.remove("show");
+  }
+
+  function reset(){
+    if(spinning) return;
+    currentRotation = 0;
+    drawWheel();
+  }
+
+  // قائمة جانبية
+  function renderPrizeList(){
+    prizeList.innerHTML = `
+      <div style="font-weight:900; margin:6px 6px 10px; color:#fff;">الهدايا داخل العجلة</div>
+    `;
+    prizes.forEach(p=>{
+      const row = document.createElement("div");
+      row.className = "item";
+      row.innerHTML = `
+        ${p.img ? `<img src="${p.img}" alt="${p.label}" onerror="this.style.display='none'">` : `<img alt="" style="opacity:.35" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='22'%3E%F0%9F%8E%81%3C/text%3E%3C/svg%3E">`}
+        <div>
+          <b>${p.label}</b>
+          <small>${p.img ? p.img : "بدون صورة"}</small>
+        </div>
+      `;
+      prizeList.appendChild(row);
+    });
+  }
+
+  // ✅ عداد تنازلي (10 دقائق)
+  let totalTime = 600;
+  function updateCountdown(){
+    const minutes = Math.floor(totalTime/60);
+    const seconds = totalTime%60;
+    document.getElementById("countdown").innerText =
+      "العرض ينتهي خلال: " + minutes + ":" + (seconds<10 ? "0":"") + seconds;
+    if(totalTime > 0) totalTime--;
+  }
+
+  // init
+  async function init(){
+    await Promise.all(prizes.map(p => loadImage(p.img)));
+    renderPrizeList();
+    drawWheel();
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
   }
 
   spinBtn.addEventListener("click", spin);
-  retryBtn.addEventListener("click", () => {
-    spinBtn.disabled = false;
-    spin();
-  });
+  resetBtn.addEventListener("click", reset);
+  closeBtn.addEventListener("click", closeModal);
+  modal.addEventListener("click", (e)=>{ if(e.target === modal) closeModal(); });
+
+  init();
 </script>
 </body>
 </html>
