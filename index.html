@@ -3,229 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>عجلة الحظ - العراق</title>
+  <title>فرصة اليوم | العراق</title>
+  <meta name="description" content="شارك في فرصة اليوم داخل العراق. لف العجلة لتحديد نوع المشاركة ثم أكمل الخطوات." />
   <style>
+    :root{
+      --bg1:#0b1220;
+      --bg2:#0f1b31;
+      --card:rgba(255,255,255,0.06);
+      --stroke:rgba(255,255,255,0.12);
+      --text:rgba(255,255,255,0.92);
+      --muted:rgba(255,255,255,0.72);
+      --brand:#22c55e;
+      --brand2:#16a34a;
+      --warn:#f59e0b;
+    }
+    *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg,#0f172a,#1e293b);
-      color:#fff;
-      display:flex;
-      justify-content:center;
-      align-items:center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 10% 10%, #1b2a4d 0%, transparent 60%),
+                  radial-gradient(900px 500px at 90% 20%, #143a2a 0%, transparent 55%),
+                  linear-gradient(160deg,var(--bg1),var(--bg2));
+      color:var(--text);
       min-height:100vh;
-      padding:20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
     }
-    .box{
-      max-width:520px;
-      width:100%;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 18px;
-      padding: 22px;
-      text-align:center;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+    .wrap{
+      width:min(980px, 100%);
+      display:grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap:16px;
     }
-    h1{
-      margin:0 0 10px;
-      font-size:24px;
-    }
-    p{
-      margin: 8px 0;
-      opacity:0.9;
-      line-height:1.6;
-      font-size:15px;
-    }
-    .wheel-wrap{
-      margin:18px auto 12px;
-      width: 320px;
-      height: 320px;
-      position:relative;
-    }
-    canvas{
-      width:100%;
-      height:100%;
-      border-radius:50%;
-      background:#fff;
-    }
-    .pointer{
-      position:absolute;
-      top:-6px;
-      left:50%;
-      transform:translateX(-50%);
-      width:0;height:0;
-      border-left:16px solid transparent;
-      border-right:16px solid transparent;
-      border-bottom:30px solid #f59e0b;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.35));
-    }
-    .btn{
-      background:#22c55e;
-      border:none;
-      color:#fff;
-      padding: 14px 18px;
-      border-radius: 14px;
-      font-size:16px;
-      cursor:pointer;
-      width:100%;
-      margin-top:12px;
-      font-weight:bold;
-    }
-    .btn:disabled{
-      opacity:0.6;
-      cursor:not-allowed;
-    }
-    .note{
-      font-size:12px;
-      opacity:0.75;
-      margin-top:12px;
-    }
-    .result{
-      margin-top:14px;
-      font-size:18px;
-      font-weight:bold;
-      color:#fbbf24;
-      min-height:24px;
-    }
-    .safe{
-      margin-top:10px;
-      font-size:12px;
-      opacity:0.7;
-    }
-  </style>
-</head>
-<body>
-  <div class="box">
-    <h1>🎡 عجلة الحظ - العراق</h1>
-    <p>لف العجلة وشارك في فرصة اليوم 🎁</p>
-    <p>قد تكون من المشاركين المختارين حسب الشروط.</p>
-
-    <div class="wheel-wrap">
-      <div class="pointer"></div>
-      <canvas id="wheel" width="320" height="320"></canvas>
-    </div>
-
-    <button class="btn" id="spinBtn">لف العجلة الآن</button>
-
-    <div class="result" id="result"></div>
-
-    <div class="note">
-      * المشاركة متاحة لفترة محدودة.
-    </div>
-
-    <div class="safe">
-      هذا العرض مخصص للمستخدمين داخل العراق فقط.
-    </div>
-  </div>
-
-<script>
-  // 🔥 ضع رابط عرض CPA هنا
-  const CPA_LINK = "PUT_YOUR_CPA_LINK_HERE";
-
-  const canvas = document.getElementById("wheel");
-  const ctx = canvas.getContext("2d");
-
-  const spinBtn = document.getElementById("spinBtn");
-  const resultEl = document.getElementById("result");
-
-  // تقسيمات العجلة (خليها هدايا عامة لتكون آمنة لفيسبوك)
-  const segments = [
-    "🎁 هدية مفاجأة",
-    "⭐ فرصة إضافية",
-    "🎉 مشاركة اليوم",
-    "🎁 هدية خاصة",
-    "⭐ فرصة جديدة",
-    "🎉 دخول السحب"
-  ];
-
-  const colors = ["#ef4444","#3b82f6","#22c55e","#f59e0b","#a855f7","#14b8a6"];
-
-  let angle = 0;
-  let spinning = false;
-
-  function drawWheel(){
-    const center = 160;
-    const radius = 150;
-    const arc = (2 * Math.PI) / segments.length;
-
-    ctx.clearRect(0,0,320,320);
-
-    for(let i=0;i<segments.length;i++){
-      const start = angle + i*arc;
-      const end = start + arc;
-
-      ctx.beginPath();
-      ctx.moveTo(center,center);
-      ctx.arc(center,center,radius,start,end);
-      ctx.closePath();
-      ctx.fillStyle = colors[i % colors.length];
-      ctx.fill();
-
-      // النص
-      ctx.save();
-      ctx.translate(center,center);
-      ctx.rotate(start + arc/2);
-      ctx.textAlign = "right";
-      ctx.fillStyle = "#fff";
-      ctx.font = "bold 14px Arial";
-      ctx.fillText(segments[i], radius - 10, 5);
-      ctx.restore();
+    @media (max-width: 860px){
+      .wrap{grid-template-columns:1fr}
     }
 
-    // دائرة وسط
-    ctx.beginPath();
-    ctx.arc(center,center,38,0,2*Math.PI);
-    ctx.fillStyle = "#111827";
-    ctx.fill();
-    ctx.fillStyle = "#fff";
-    ctx.font = "bold 14px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText("SPIN", center, center+5);
-  }
-
-  drawWheel();
-
-  spinBtn.addEventListener("click", () => {
-    if(spinning) return;
-    spinning = true;
-    spinBtn.disabled = true;
-    resultEl.textContent = "";
-
-    // دوران عشوائي
-    const spins = Math.floor(Math.random() * 5) + 6; // 6-10 لفات
-    const finalAngle = angle + spins * 2*Math.PI + Math.random() * 2*Math.PI;
-
-    const duration = 4200; // ms
-    const start = performance.now();
-
-    function animate(now){
-      const t = Math.min((now - start) / duration, 1);
-      // easing
-      const ease = 1 - Math.pow(1 - t, 3);
-
-      angle = angle + (finalAngle - angle) * ease;
-      drawWheel();
-
-      if(t < 1){
-        requestAnimationFrame(animate);
-      } else {
-        // تحديد النتيجة
-        const arc = (2 * Math.PI) / segments.length;
-        const normalized = (2*Math.PI - (angle % (2*Math.PI))) % (2*Math.PI);
-        const index = Math.floor(normalized / arc) % segments.length;
-
-        const prize = segments[index];
-        resultEl.textContent = "نتيجتك: " + prize;
-
-        // بعد ثانيتين تحويل للرابط
-        setTimeout(() => {
-          window.location.href = CPA_LINK;
-        }, 2000);
-      }
+    .card{
+      background:var(--card);
+      border:1px solid var(--stroke);
+      border-radius:22px;
+      box-shadow: 0 18px 55px rgba(0,0,0,0.45);
+      overflow:hidden;
     }
-
-    requestAnimationFrame(animate);
-  });
-</script>
-</body>
-</html>
+    .hero{
+      padding:18px 18px 14px;
