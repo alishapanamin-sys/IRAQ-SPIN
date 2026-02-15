@@ -3,50 +3,529 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>فرصة اليوم | العراق</title>
-  <meta name="description" content="شارك في فرصة اليوم داخل العراق. لف العجلة لتحديد نوع المشاركة ثم أكمل الخطوات." />
+  <title>فرصة اليوم داخل العراق</title>
+  <meta name="description" content="لف العجلة وحدد نوع الجائزة المحتملة ثم أكمل الخطوات." />
   <style>
     :root{
-      --bg1:#0b1220;
-      --bg2:#0f1b31;
-      --card:rgba(255,255,255,0.06);
-      --stroke:rgba(255,255,255,0.12);
-      --text:rgba(255,255,255,0.92);
-      --muted:rgba(255,255,255,0.72);
-      --brand:#22c55e;
-      --brand2:#16a34a;
-      --warn:#f59e0b;
+      --bg1:#070913;
+      --bg2:#0A1240;
+      --neonP:#7C3AED;
+      --neonC:#22D3EE;
+      --neonB:#2563EB;
+      --gold:#FBBF24;
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.72);
+      --card:rgba(255,255,255,.06);
+      --stroke:rgba(255,255,255,.12);
+      --btn1:#6D28D9;
+      --btn2:#2563EB;
     }
     *{box-sizing:border-box}
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 600px at 10% 10%, #1b2a4d 0%, transparent 60%),
-                  radial-gradient(900px 500px at 90% 20%, #143a2a 0%, transparent 55%),
-                  linear-gradient(160deg,var(--bg1),var(--bg2));
+      background:
+        radial-gradient(900px 520px at 15% 18%, rgba(124,58,237,.22) 0%, transparent 60%),
+        radial-gradient(900px 520px at 85% 30%, rgba(34,211,238,.18) 0%, transparent 55%),
+        radial-gradient(900px 520px at 50% 92%, rgba(37,99,235,.16) 0%, transparent 55%),
+        linear-gradient(160deg,var(--bg1),var(--bg2));
       color:var(--text);
       min-height:100vh;
       display:flex;
       align-items:center;
       justify-content:center;
       padding:18px;
+      overflow-x:hidden;
     }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:-60px;
+      background:
+        radial-gradient(circle at 10% 30%, rgba(255,255,255,.08) 0 10px, transparent 11px),
+        radial-gradient(circle at 72% 18%, rgba(255,255,255,.07) 0 12px, transparent 13px),
+        radial-gradient(circle at 50% 62%, rgba(255,255,255,.06) 0 14px, transparent 15px),
+        radial-gradient(circle at 25% 85%, rgba(255,255,255,.05) 0 16px, transparent 17px);
+      pointer-events:none;
+      opacity:.65;
+      filter: blur(1px);
+    }
+
     .wrap{
-      width:min(980px, 100%);
+      width:min(1020px, 100%);
       display:grid;
-      grid-template-columns: 1.05fr 0.95fr;
+      grid-template-columns: 1.1fr .9fr;
       gap:16px;
     }
-    @media (max-width: 860px){
-      .wrap{grid-template-columns:1fr}
-    }
+    @media (max-width: 920px){ .wrap{grid-template-columns:1fr} }
 
     .card{
       background:var(--card);
       border:1px solid var(--stroke);
       border-radius:22px;
-      box-shadow: 0 18px 55px rgba(0,0,0,0.45);
+      box-shadow: 0 18px 60px rgba(0,0,0,.55);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .head{ padding:18px 18px 12px; }
+    .flag{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:16px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      box-shadow: 0 10px 35px rgba(0,0,0,.25);
+    }
+    .flagMark{
+      width:38px;height:24px;border-radius:6px;
+      background: linear-gradient(#d10000 0 33%, #fff 33% 66%, #111 66% 100%);
+      position:relative; overflow:hidden;
+    }
+    .flagMark::after{
+      content:"الله أكبر";
+      position:absolute; inset:0;
+      display:grid; place-items:center;
+      font-size:10px; color:#0a9a3b; font-weight:900;
+      opacity:.9;
+      transform: translateY(1px);
+    }
+    .title{
+      margin:14px 0 4px;
+      font-size:28px;
+      font-weight:950;
+      letter-spacing:-.3px;
+      color:#ffd36b;
+      text-shadow: 0 0 18px rgba(251,191,36,.22);
+    }
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      line-height:1.6;
+      font-size:14px;
+    }
+
+    .wheelArea{ padding: 0 18px 18px; display:grid; gap:12px; }
+
+    .wheelBox{
+      border-radius:22px;
+      border:1px solid rgba(124,58,237,.24);
+      background: linear-gradient(180deg, rgba(124,58,237,.10), rgba(34,211,238,.06));
+      padding:16px;
+      position:relative;
       overflow:hidden;
     }
-    .hero{
-      padding:18px 18px 14px;
+    .wheelBox::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 240px at 30% 10%, rgba(124,58,237,.28), transparent 60%),
+        radial-gradient(700px 240px at 70% 15%, rgba(34,211,238,.22), transparent 60%);
+      pointer-events:none;
+      opacity:.75;
+    }
+
+    .wheelWrap{
+      width:min(440px, 100%);
+      margin: 6px auto 14px;
+      position:relative;
+      aspect-ratio: 1 / 1;
+      z-index:1;
+    }
+    canvas{
+      width:100%;
+      height:100%;
+      display:block;
+      border-radius:999px;
+      background:#fff;
+      box-shadow:
+        0 18px 55px rgba(0,0,0,.55),
+        0 0 32px rgba(124,58,237,.25),
+        0 0 28px rgba(34,211,238,.20);
+    }
+
+    .pointer{
+      position:absolute; top:-10px; left:50%;
+      transform:translateX(-50%);
+      width:0;height:0;
+      border-left:18px solid transparent;
+      border-right:18px solid transparent;
+      border-bottom:34px solid #ffb400;
+      filter: drop-shadow(0 10px 14px rgba(0,0,0,.5))
+              drop-shadow(0 0 10px rgba(255,180,0,.35));
+      z-index:2;
+    }
+
+    .cta{ display:flex; gap:10px; flex-wrap:wrap; z-index:1; position:relative; }
+    .btn{
+      flex:1;
+      border:none;
+      border-radius:18px;
+      padding:14px 14px;
+      font-weight:950;
+      font-size:16px;
+      cursor:pointer;
+      color:rgba(255,255,255,.95);
+      background: linear-gradient(135deg, var(--btn1), var(--btn2));
+      box-shadow:
+        0 10px 30px rgba(37,99,235,.25),
+        0 0 22px rgba(124,58,237,.22),
+        inset 0 0 0 1px rgba(255,255,255,.12);
+      transition: transform .08s ease, opacity .12s ease;
+    }
+    .btn:active{ transform: scale(.99); }
+    .btn:disabled{ opacity:.55; cursor:not-allowed; }
+    .btnGhost{
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:none;
+      font-weight:900;
+    }
+
+    .result{
+      margin-top:12px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.20);
+      padding:12px 12px;
+      z-index:1;
+      position:relative;
+    }
+    .result small{ color:var(--muted); display:block; margin-bottom:6px }
+    .result b{
+      display:block;
+      font-size:17px;
+      color:#ffe08a;
+      text-shadow: 0 0 18px rgba(251,191,36,.20);
+      min-height: 22px;
+    }
+
+    .gifts{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap:10px;
+      z-index:1;
+      position:relative;
+    }
+    @media (max-width: 520px){ .gifts{grid-template-columns:1fr} }
+    .gift{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      padding:12px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .gift .ico{
+      width:36px;height:36px;border-radius:14px;
+      display:grid; place-items:center;
+      background: rgba(34,211,238,.14);
+      border:1px solid rgba(34,211,238,.22);
+      font-size:18px;
+      flex:0 0 auto;
+    }
+    .gift b{display:block; font-size:13px; margin-bottom:2px}
+    .gift span{display:block; font-size:12px; color:rgba(255,255,255,.72); line-height:1.5}
+
+    .footRow{
+      display:flex; justify-content:space-between; gap:10px;
+      margin-top:12px;
+      color:rgba(255,255,255,.65);
+      font-size:12px;
+      z-index:1;
+      position:relative;
+    }
+
+    .side{ padding:18px; }
+    .side h2{ margin:0 0 10px; font-size:16px; letter-spacing:-.2px; }
+    .step{
+      display:flex; gap:10px;
+      padding:12px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      margin-bottom:10px;
+    }
+    .n{
+      width:30px;height:30px;border-radius:12px;
+      display:grid; place-items:center;
+      background: rgba(124,58,237,.16);
+      border:1px solid rgba(124,58,237,.26);
+      font-weight:950;
+    }
+    .step b{ display:block; font-size:13px; margin-bottom:3px }
+    .step span{ display:block; font-size:12px; color:rgba(255,255,255,.72); line-height:1.6 }
+
+    .note{
+      margin-top:12px;
+      padding-top:12px;
+      border-top:1px dashed rgba(255,255,255,.15);
+      font-size:11.5px;
+      color:rgba(255,255,255,.60);
+      line-height:1.7;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+    <!-- Main -->
+    <section class="card">
+      <div class="head">
+        <div class="flag">
+          <div class="flagMark" aria-hidden="true"></div>
+          <div>
+            <div style="font-weight:950;">العراق فقط</div>
+            <div style="color:var(--muted); font-size:12px;">لفترة محدودة</div>
+          </div>
+        </div>
+
+        <h1 class="title">فرصة اليوم داخل العراق!</h1>
+        <p class="subtitle">
+          لف العجلة لتحديد <b>نوع الهدية المحتملة</b>، ثم انتقل لإكمال الخطوات المطلوبة.
+        </p>
+      </div>
+
+      <div class="wheelArea">
+        <div class="wheelBox">
+          <div class="wheelWrap">
+            <div class="pointer"></div>
+            <canvas id="wheel" width="440" height="440"></canvas>
+          </div>
+
+          <div class="cta">
+            <button class="btn" id="spinBtn">لف العجلة الآن!</button>
+            <button class="btn btnGhost" id="retryBtn" disabled>محاولة أخرى</button>
+          </div>
+
+          <div class="result">
+            <small>النتيجة</small>
+            <b id="resultText">—</b>
+          </div>
+
+          <!-- جوائز معروضة تحت العجلة -->
+          <div class="gifts">
+            <div class="gift"><div class="ico">📱</div><div><b>iPhone</b><span>هدية محتملة ضمن سحب اليوم</span></div></div>
+            <div class="gift"><div class="ico">📲</div><div><b>Samsung</b><span>فرصة ضمن المشاركات المؤهلة</span></div></div>
+            <div class="gift"><div class="ico">🎧</div><div><b>AirPods</b><span>قد تتوفر حسب التوافق</span></div></div>
+            <div class="gift"><div class="ico">🎁</div><div><b>هدايا أخرى</b><span>عروض متنوعة حسب الشروط</span></div></div>
+          </div>
+
+          <div class="footRow">
+            <div>✅ العراق فقط</div>
+            <div>⏳ لفترة محدودة</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Side -->
+    <aside class="card side">
+      <h2>كيف تعمل؟</h2>
+
+      <div class="step">
+        <div class="n">1</div>
+        <div>
+          <b>اضغط لف العجلة</b>
+          <span>ستظهر لك هدية/فئة هدية “محتملة” ضمن سحب اليوم.</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n">2</div>
+        <div>
+          <b>أكمل الخطوات</b>
+          <span>سيتم تحويلك للصفحة التالية لإتمام المتطلبات (قد تختلف حسب العرض).</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n">3</div>
+        <div>
+          <b>تحقق من الأهلية</b>
+          <span>التوفر يعتمد على الدولة/المشغل/الجهاز وقيود العرض.</span>
+        </div>
+      </div>
+
+      <div class="note">
+        ملاحظة: الصفحة لا تضمن الفوز بأي هدية. المشاركة تخضع للشروط والمتطلبات في الصفحة التالية.
+      </div>
+    </aside>
+  </main>
+
+<script>
+  // ✅ ضع رابط عرض CPA هنا
+  const CPA_LINK = "PUT_YOUR_CPA_LINK_HERE";
+
+  const canvas = document.getElementById("wheel");
+  const ctx = canvas.getContext("2d");
+
+  const spinBtn = document.getElementById("spinBtn");
+  const retryBtn = document.getElementById("retryBtn");
+  const resultText = document.getElementById("resultText");
+
+  // ✅ جوائز على العجلة (بدون مبالغة)
+  const segments = [
+    { t:"📱 iPhone", },
+    { t:"🎧 AirPods", },
+    { t:"📲 Samsung", },
+    { t:"🎁 هدية مفاجأة", },
+    { t:"🎮 بطاقة شحن", },
+    { t:"🛍️ قسيمة شراء", }
+  ];
+
+  const colors = ["#2563EB","#A855F7","#22C55E","#F59E0B","#14B8A6","#EF4444"];
+
+  let angle = 0;
+  let spinning = false;
+
+  function drawNeonLED(center, radius){
+    const dots = 56;
+    for(let i=0;i<dots;i++){
+      const a = (i/dots) * 2*Math.PI;
+      const x = center + Math.cos(a) * radius;
+      const y = center + Math.sin(a) * radius;
+
+      const glow = (i%3===0) ? "rgba(34,211,238,.88)" :
+                   (i%3===1) ? "rgba(124,58,237,.88)" :
+                               "rgba(37,99,235,.88)";
+
+      ctx.beginPath();
+      ctx.arc(x,y,4.0,0,2*Math.PI);
+      ctx.fillStyle = glow;
+      ctx.shadowColor = glow;
+      ctx.shadowBlur = 14;
+      ctx.fill();
+    }
+    ctx.shadowBlur = 0;
+  }
+
+  function drawWheel(){
+    const size = canvas.width;
+    const center = size/2;
+    const radius = center - 28;
+    const arc = (2*Math.PI)/segments.length;
+
+    ctx.clearRect(0,0,size,size);
+
+    // outer glow ring
+    ctx.beginPath();
+    ctx.arc(center,center,radius+18,0,2*Math.PI);
+    ctx.fillStyle = "rgba(124,58,237,.14)";
+    ctx.fill();
+
+    // outer dark ring
+    ctx.beginPath();
+    ctx.arc(center,center,radius+12,0,2*Math.PI);
+    ctx.fillStyle = "#0A0F24";
+    ctx.fill();
+
+    // LED ring
+    drawNeonLED(center, radius+8);
+
+    // slices
+    for(let i=0;i<segments.length;i++){
+      const start = angle + i*arc;
+      const end = start + arc;
+
+      ctx.beginPath();
+      ctx.moveTo(center,center);
+      ctx.arc(center,center,radius,start,end);
+      ctx.closePath();
+      ctx.fillStyle = colors[i % colors.length];
+      ctx.fill();
+
+      // label
+      ctx.save();
+      ctx.translate(center,center);
+      ctx.rotate(start + arc/2);
+      ctx.textAlign = "right";
+      ctx.fillStyle = "rgba(255,255,255,.95)";
+      ctx.font = "950 22px Arial";
+      ctx.shadowColor = "rgba(0,0,0,.35)";
+      ctx.shadowBlur = 6;
+      ctx.fillText(segments[i].t, radius - 18, 10);
+      ctx.restore();
+    }
+    ctx.shadowBlur = 0;
+
+    // center button
+    ctx.beginPath();
+    ctx.arc(center,center,58,0,2*Math.PI);
+    ctx.fillStyle = "#0B1026";
+    ctx.fill();
+
+    // neon strokes
+    ctx.strokeStyle = "rgba(34,211,238,.55)";
+    ctx.lineWidth = 4;
+    ctx.shadowColor = "rgba(34,211,238,.55)";
+    ctx.shadowBlur = 18;
+    ctx.stroke();
+
+    ctx.shadowBlur = 0;
+    ctx.beginPath();
+    ctx.arc(center,center,50,0,2*Math.PI);
+    ctx.strokeStyle = "rgba(124,58,237,.45)";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    ctx.fillStyle = "rgba(255,255,255,.95)";
+    ctx.font = "950 24px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("ابدأ", center, center+9);
+  }
+
+  drawWheel();
+
+  function spin(){
+    if(spinning) return;
+    spinning = true;
+    spinBtn.disabled = true;
+    retryBtn.disabled = true;
+    resultText.textContent = "جاري الدوران…";
+
+    const arc = (2*Math.PI)/segments.length;
+    const targetIndex = Math.floor(Math.random()*segments.length);
+
+    const jitter = (Math.random()*0.55 + 0.20) * arc;
+    const targetAngle = (2*Math.PI) - (targetIndex * arc + jitter);
+
+    const spins = Math.floor(Math.random()*4) + 7; // 7-10
+    const finalAngle = angle + spins*2*Math.PI + targetAngle;
+
+    const duration = 4200;
+    const start = performance.now();
+
+    function animate(now){
+      const t = Math.min((now-start)/duration, 1);
+      const ease = 1 - Math.pow(1 - t, 3);
+
+      angle = angle + (finalAngle - angle) * ease;
+      drawWheel();
+
+      if(t < 1){
+        requestAnimationFrame(animate);
+      } else {
+        const normalized = (2*Math.PI - (angle % (2*Math.PI))) % (2*Math.PI);
+        const index = Math.floor(normalized / arc) % segments.length;
+
+        resultText.textContent = "نتيجتك: " + segments[index].t;
+        retryBtn.disabled = false;
+        spinning = false;
+
+        // تحويل تلقائي
+        setTimeout(()=>{ window.location.href = CPA_LINK; }, 1600);
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+
+  spinBtn.addEventListener("click", spin);
+  retryBtn.addEventListener("click", () => {
+    spinBtn.disabled = false;
+    spin();
+  });
+</script>
+</body>
+</html>
